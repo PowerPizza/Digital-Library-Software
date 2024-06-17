@@ -1,0 +1,56 @@
+def onManageBooks():
+    books_df = pd.read_csv(open("db/books_data.csv", "rb"))
+
+    manage_book_canvas = Canvas(root, bg="#ffffff")
+    top_options = Frame(manage_book_canvas, bg="#ffffff", highlightthickness=1, highlightbackground="#000000")
+    btn_add_books = Button(top_options, text="Add Books", font=("Arial", 16), bg="#d9ebff", relief="ridge", width=12)
+    btn_add_books.pack(side=LEFT, padx=1)
+    btn_delete_book = Button(top_options, text="Delete Book", font=("Arial", 16), bg="#d9ebff", relief="ridge", width=12)
+    btn_delete_book.pack(side=LEFT, padx=1)
+    btn_close = Button(top_options, text="Close", font=("Arial", 16), bg="#d9ebff", relief="ridge", width=12)
+    btn_close.pack(side=LEFT, padx=1, pady=1)
+    top_options.pack(fill=X)
+
+    table_frame = Frame()
+    def loadTable():
+        nonlocal table_frame
+        if table_frame:
+            table_frame.destroy()
+
+        table_frame = Frame(book_view_canvas, bg="#FF0000")
+        for i, item in enumerate(books_df.columns):
+            lbl_th = Label(table_frame, text=item, font=("Helvetica", 16, "bold"), highlightthickness=1, highlightbackground="#000000")
+            lbl_th.grid(row=1, column=i, sticky=NSEW, ipadx=20)
+
+        table_frame.pack()
+
+        table_frame.bind("<Configure>", lambda eve: book_view_canvas.configure(scrollregion=book_view_canvas.bbox("all")))
+        book_view_canvas.create_window((0, 0), window=table_frame, anchor=NW)
+
+    # -------------- TABLE VIEW AND Y ORIENT SCROLLBAR --------
+    fr_bi_layout = Frame(manage_book_canvas, bg="#ffffff")
+    frame_table_holder = Frame(fr_bi_layout)
+    book_view_canvas = Canvas(frame_table_holder, bg="#ffffff")
+    book_view_canvas.pack(fill=BOTH, expand=True)
+    frame_table_holder.pack(fill=BOTH, expand=True, side=LEFT)
+
+    scroll_bar_Y = Scrollbar(fr_bi_layout, orient="vertical", command=book_view_canvas.yview)
+    scroll_bar_Y.pack(side=RIGHT, fill=Y, pady=2)
+    book_view_canvas.configure(yscrollcommand=scroll_bar_Y.set)
+    fr_bi_layout.pack(fill=BOTH, expand=True)
+    def onMouseScroll(eve):
+        if table_frame and table_frame.winfo_y() > 2 and eve.delta > 0:
+            return
+        book_view_canvas.yview_scroll((eve.delta//100)*-1, 'units')
+    scrollBindID = root.bind("<MouseWheel>", onMouseScroll)
+    # -------------- TABLE VIEW AND Y ORIENT SCROLLBAR END --------
+
+    # -------------- X ORIENT SCROLLBAR + TABLE LOADING --------
+    scroll_bar_X = Scrollbar(manage_book_canvas, orient="horizontal", command=book_view_canvas.xview)
+    scroll_bar_X.pack(fill=X)
+    book_view_canvas.configure(xscrollcommand=scroll_bar_X.set)
+    loadTable()
+    # -------------- (END) X ORIENT SCROLLBAR + TABLE LOADING --------
+    manage_book_canvas.place(relx=0, rely=0, relwidth=1, relheight=1)
+
+

@@ -1,0 +1,5 @@
+TO CREATE ONLY ONE EXE OUTPUT
+python -m PyInstaller --onefile --icon=software_icon_ICO.ico -F --hidden-import "babel.numbers" .\main.py
+
+TO CREATE A SOFTWARE PACKAGE
+python -m PyInstaller --icon=software_icon_ICO.ico -F --hidden-import "babel.numbers" .\main.py

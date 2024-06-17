@@ -1,0 +1,10 @@
+books_data.csv  ==> stores data of books
+COLUMNS : ACC NO.,AUTHOR,TITLE,VOLUME,PLACE AND PUBLISHER,YEAR OF PUBLISH,PAGES,BOOK NO.,COST
+
+------------------------
+issued_books_data.csv  ==> stores data of issued books
+COLUMNS : SNO.,BOOK ACC. NO.,CLIENT NAME,CLIENT PHONE NO.,ISSUE DATE,RETURN DATE,IS RETURNED
+
+------------------------
+returned_books_data.csv  ==> stores data of returned books
+COLUMNS : SNO.,BOOK ACC. NO.,CLIENT NAME,CLIENT PHONE NO.,ISSUED DATE,RETURN DATE,RETURNING AT
